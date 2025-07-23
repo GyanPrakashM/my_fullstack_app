@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 
 // ✅ Root route (home page)
 app.get("/", (req, res) => {
-  res.render("home"); // make sure views/home.ejs exists
+  res.render("listings/index"); // make sure views/home.ejs exists
 });
 
 // Routes

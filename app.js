@@ -17,6 +17,7 @@ const User = require("./models/user");
 const listingsRouter = require("./routes/listing");
 const reviewsRouter = require("./routes/review");
 const userRouter = require("./routes/user");
+const Listing = require("./models/listing");
 
 const app = express();
 
@@ -67,9 +68,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// 🟢 Routes
-app.get("/", (req, res) => {
-  res.render("home");
+app.get("/", async (req, res) => {
+  const allListings = await Listing.find({});
+  res.render("home", { allListings });
 });
 
 app.use("/listings", listingsRouter);

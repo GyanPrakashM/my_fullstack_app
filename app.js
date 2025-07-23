@@ -1,66 +1,55 @@
 if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
+  require('dotenv').config();
 }
 
 const express = require("express");
 const mongoose = require("mongoose");
-const ejsMate = require("ejs-mate");
 const path = require("path");
 const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
+const ExpressError = require("./utils/ExpressError");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-
-const ExpressError = require("./utils/ExpressError");
 const User = require("./models/user");
-const listingsRouter = require("./routes/listing");
-const reviewsRouter = require("./routes/review");
-const userRouter = require("./routes/user");
-const Listing = require("./models/listing");
+
+const listingsRoutes = require("./routes/listing");
+const reviewsRoutes = require("./routes/review");
+const userRoutes = require("./routes/user");
 
 const app = express();
 
-// 🟢 MongoDB connection
-const dbUrl = process.env.ATLASDB_URL || "mongodb://localhost:27017/yourLocalDB";
-mongoose
-  .connect(dbUrl)
-  .then(() => console.log("🟢 MongoDB Connected"))
-  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
+const sessionOptions = {
+  secret: "keyboard cat",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true
+  }
+};
 
-// 🟢 EJS Template engine setup
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// 🟢 Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
-
-// 🟢 Session configuration
-const sessionOptions = {
-  secret: process.env.SESSION_SECRET || "keyboard cat",
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 7 days
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-  },
-};
-
 app.use(session(sessionOptions));
 app.use(flash());
 
-// 🟢 Passport setup
+// Passport Setup
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// 🟢 Flash & user info middleware
+// Flash and User Middleware
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -68,32 +57,36 @@ app.use((req, res, next) => {
   next();
 });
 
+// ✅ ROUTES
+app.use("/", userRoutes);
+app.use("/listings", listingsRoutes);
+app.use("/listings/:id/reviews", reviewsRoutes);
+
+// ✅ Root route - only one
 app.get("/", (req, res) => {
-  res.render("home");  // make sure views/home.ejs exist karta ho
+  res.redirect("/listings"); // or res.render("home") if you have home.ejs
 });
 
-app.get("/", (req, res) => {
-  res.redirect("/listings"); // ya res.render("home") agar home.ejs hai
-});
-
-app.use("/listings", listingsRouter);
-app.use("/listings/:id/reviews", reviewsRouter);
-app.use("/", userRouter);
-
-// 🟠 404 Handler
+// ❌ Catch-all for unhandled routes
 app.all("*", (req, res, next) => {
-  next(new ExpressError(404, "Page Not Found!"));
+  next(new ExpressError(404, "Page Not Found"));
 });
 
-// 🔴 Global Error Handler
+// ✅ Error Handler
 app.use((err, req, res, next) => {
-  const { statusCode = 500 } = err;
-  if (!err.message) err.message = "Something went wrong!";
-  res.status(statusCode).render("error", { err });
+  const { status = 500, message = "Something went wrong" } = err;
+  res.status(status).render("error", { err });
 });
 
-// 🟢 Server start
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+// ✅ MongoDB connection
+main().then(() => console.log("Database connected"))
+     .catch(err => console.log(err));
+
+async function main() {
+  await mongoose.connect(process.env.ATLASDB_URL); // Make sure env var is set
+}
+
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
 });

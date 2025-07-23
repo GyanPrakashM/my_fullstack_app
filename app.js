@@ -72,6 +72,9 @@ app.get("/", (req, res) => {
   res.render("home");  // make sure views/home.ejs exist karta ho
 });
 
+app.get("/", (req, res) => {
+  res.redirect("/listings"); // ya res.render("home") agar home.ejs hai
+});
 
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);

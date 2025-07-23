@@ -68,9 +68,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", async (req, res) => {
-  const allListings = await Listing.find({});
-  res.send("home", { allListings });
+app.get("/",  (req, res) => {
+ // const allListings = await Listing.find({});
+  res.render("home");
 });
 
 app.use("/listings", listingsRouter);

@@ -70,7 +70,7 @@ app.use((req, res, next) => {
 
 app.get("/", async (req, res) => {
   const allListings = await Listing.find({});
-  res.render("home", { allListings });
+  res.send("home", { allListings });
 });
 
 app.use("/listings", listingsRouter);

@@ -69,7 +69,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  res.redirect("/listings"); // ya res.render("home"); agar home.ejs hai
+  res.render("home");  // make sure views/home.ejs exist karta ho
 });
 
 

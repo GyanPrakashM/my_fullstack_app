@@ -8,57 +8,58 @@ const ejsMate = require("ejs-mate");
 const path = require("path");
 const methodOverride = require("method-override");
 const session = require("express-session");
-const ExpressError = require("./utils/ExpressError");
-const listingsRouter = require("./routes/listing");
-const reviewsRouter = require("./routes/review");
-const userRouter = require("./routes/user");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+
+const ExpressError = require("./utils/ExpressError");
 const User = require("./models/user");
+const listingsRouter = require("./routes/listing");
+const reviewsRouter = require("./routes/review");
+const userRouter = require("./routes/user");
 
 const app = express();
 
-// Mongoose connection
-main().catch((err) => console.log(err));
-async function main() {
-  await mongoose.connect(process.env.ATLASDB_URL);
-  console.log("DB Connected");
-}
+// 🟢 MongoDB connection
+const dbUrl = process.env.ATLASDB_URL || "mongodb://localhost:27017/yourLocalDB";
+mongoose
+  .connect(dbUrl)
+  .then(() => console.log("🟢 MongoDB Connected"))
+  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
-// Template engine setup
+// 🟢 EJS Template engine setup
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// Middlewares
+// 🟢 Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 
+// 🟢 Session configuration
 const sessionOptions = {
-  secret: "keyboard cat",
+  secret: process.env.SESSION_SECRET || "keyboard cat",
   resave: false,
   saveUninitialized: true,
   cookie: {
-    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 7 days
+    maxAge: 1000 * 60 * 60 * 24 * 7,
   },
 };
 
 app.use(session(sessionOptions));
 app.use(flash());
 
-// Passport configuration
+// 🟢 Passport setup
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
-
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// Flash messages & user middleware
+// 🟢 Flash & user info middleware
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -66,27 +67,29 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ Root route (home page)
+// 🟢 Routes
 app.get("/", (req, res) => {
-  res.render("home"); // make sure views/home.ejs exists
+  res.render("home");
 });
 
-// Routes
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
 
-// Error handler for unknown routes
+// 🟠 404 Handler
 app.all("*", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
 
-// General error handler
+// 🔴 Global Error Handler
 app.use((err, req, res, next) => {
-  let { statusCode = 500, message = "Something went wrong!" } = err;
-  res.status(statusCode).render("error", { message });
+  const { statusCode = 500 } = err;
+  if (!err.message) err.message = "Something went wrong!";
+  res.status(statusCode).render("error", { err });
 });
 
-app.listen(8080, () => {
-  console.log("Server is listening on port 8080");
+// 🟢 Server start
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });

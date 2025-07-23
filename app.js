@@ -20,12 +20,9 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
-
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
-
-
 
  const dbUrl = process.env.ATLASDB_URL;
 //  Connect to MongoDB
@@ -36,7 +33,6 @@ main()
 async function main() {
   await mongoose.connect(dbUrl);
 }
-
 //  Setup
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -71,7 +67,6 @@ const sessionOptions = {
   },
 };
 
-
 app.use(session(sessionOptions));
 app.use(flash());
 
@@ -91,26 +86,10 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.get("/demouser",async(req,res) =>{
-//   let fakeUser = new User({
-//     email:"student@gmail.com",
-//     username:"delta-student"
-//   });
-
-//  let registerUser =  await User.register(fakeUser,"helloworld");
-//  res.send(registerUser);
-// });
-
-
 //  Routes
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/",userRouter);
-
-//  Home route
-// app.get("/", (req, res) => {
-//   res.send("🏠 Home Page");
-// });
 
 //  Error Handler
 app.use((err, req, res, next) => {

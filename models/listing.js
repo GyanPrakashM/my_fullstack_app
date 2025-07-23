@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./review.js");
 
-
 const listingSchema = new Schema({
     title: {
         type: String,
@@ -32,8 +31,8 @@ const listingSchema = new Schema({
    },
 geometry: {
     type: {
-      type: String, // Don't do `{ location: { type: String } }`
-      enum: ['Point'], // 'location.type' must be 'Point'
+      type: String,
+      enum: ['Point'], 
       required: true
     },
     coordinates: {
@@ -42,12 +41,6 @@ geometry: {
     },
   },
 
-
-  // for filters adding backend functionalites
-// category:{
-//   type:String,
-//   enum:["mountian","artic" , "farms" , "amazing pool"],
-// }
     });
 
 listingSchema.post("findOneAndDelete",async (listing) => {

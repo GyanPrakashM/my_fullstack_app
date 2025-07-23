@@ -17,10 +17,8 @@ router.route("/")
     wrapAsync(listingController.createlisting)
   );
 
-
 //new Route
 router.get("/new", isloggedIn,listingController.renderNewForm);
-
 
 router.route("/:id")
   .get(wrapAsync(listingController.showlisting))
@@ -37,14 +35,9 @@ router.route("/:id")
     wrapAsync(listingController.distroyListing)
   );
 
-
-
 //Edit route 
 router.get("/:id/edit" , isloggedIn ,isOwner ,wrapAsync(listingController.renderEditform
 ));
-
-
-
 
 module.exports = router;
 

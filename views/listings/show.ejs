@@ -3,25 +3,23 @@
 <script>
 const mapToken = "<%= process.env.MAP_TOKEN %>";
 const listing = <%- JSON.stringify(listing) %>;
-
 </script>
-
 <%- include("../includes/flash.ejs") %>
 <div class="row mt-3">
     <div class="col-xl-6 col-md-8 offset-xl-3 offset-md-2">
         <h3><%= listing.title %></h3>
 
-        <div class="card show-card mt-3 show-card listing-card">
-            <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image">
-            <div class="card-body">
-                <p class="card-text">Owned by <i><%= listing.owner.username %></i></p>
-                <p class="card-text"> <%= listing.description %> </p>
-                <p class="card-text">&#8377; <%= listing.price.toLocaleString("en-IN") %></p>
-                <p class="card-text"><%= listing.location %> </p>
-                <p class="card-text"><%= listing.country %></p>
-            </div>
-        </div>
+<div class="card show-card mt-3 show-card listing-card" id="description">
+    <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image">
+    <div class="card-body">
+        <p class="card-text">Owned by <i><%= listing.owner.username %></i></p>
+      <p class="card-text" id="description"><%= listing.description %></p>
 
+        <p class="card-text">&#8377; <%= listing.price.toLocaleString("en-IN") %></p>
+        <p class="card-text"><%= listing.location %> </p>
+        <p class="card-text"><%= listing.country %></p>
+    </div>
+</div>
         <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
         <div class="btns d-flex justify-content-start mt-3 mb-3">
             <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark me-3 edit-btn">Edit</a>
@@ -30,9 +28,7 @@ const listing = <%- JSON.stringify(listing) %>;
             </form>
         </div>
         <% } %>
-
     </div>
-
     <div class="col-8 offset-3">
        
         <% if(currUser) { %>
@@ -53,7 +49,6 @@ const listing = <%- JSON.stringify(listing) %>;
                 <input type="radio" id="first-rate5" name="review[rating]" value="5" />
                 <label for="first-rate5" title="Amazing">5 stars</label>
             </fieldset>
-
             <div class="mb-3 mt-3">
                 <label for="comment" class="form-label">Comments</label>
                 <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
@@ -67,7 +62,6 @@ const listing = <%- JSON.stringify(listing) %>;
         <% } %>
 
       <% if(listing.reviews && listing.reviews.length > 0)  { %>
-
         <div class="row">
         <p><b>ALL Reviews</b></p> <br>
             <% for(review of listing.reviews) { %>
@@ -90,7 +84,6 @@ const listing = <%- JSON.stringify(listing) %>;
             <div id="map"></div>
       </div>
 </div>
-
 
 <script src="/js/map.js"></script>
 

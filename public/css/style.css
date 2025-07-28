@@ -227,6 +227,20 @@ html {
     gap: 1rem;
   }
 
+.filters-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  display: flex;
+  gap: 12px;
+  padding: 0 16px;
+
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+
   .filters {
     display: flex;
     flex-wrap: wrap;

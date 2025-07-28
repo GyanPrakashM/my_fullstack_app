@@ -34,7 +34,8 @@ const listing = <%-JSON.stringify(listing) %>;
         <% if(currUser) { %>
              <hr> 
         <h4>Leave a Review</h4>
-        <form action="/listings/<%= listing.id %>/reviews" method="post" novalidate class="needs-validation">
+      <form action="/listings/<%= listing._id %>/reviews" method="post" novalidate class="needs-validation">
+
             <fieldset class="starability-grow">
 
                 <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />

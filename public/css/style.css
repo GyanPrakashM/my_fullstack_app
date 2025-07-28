@@ -212,3 +212,92 @@ html {
     width: 100%;
     max-width: 400px;
   }
+
+
+  /* for filters in index.ejs */
+
+  
+  .filters-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    gap: 1rem;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    flex: 1;
+  }
+
+  .filters {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: nowrap;
+  align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.5rem;
+}
+
+.filters::-webkit-scrollbar {
+  display: none; /* hides scrollbar on mobile for clean look */
+}
+
+
+
+  .filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.7;
+    transition: 0.2s ease;
+    min-width: 70px;
+    text-align: center;
+  }
+
+  .filter:hover {
+    opacity: 1;
+    cursor: pointer;
+    transform: translateY(-2px);
+  }
+
+  .filter p {
+    font-size: 0.8rem;
+    margin: 0;
+    margin-top: 0.2rem;
+  }
+
+  .tax-toggle {
+    border: 1px solid black;
+    border-radius: 1.5rem;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    height: 3.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .filters-wrapper {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .filters {
+      justify-content: space-between;
+      row-gap: 1rem;
+    }
+
+    .tax-toggle {
+      margin-top: 1rem;
+      width: 100%;
+      justify-content: center;
+    }
+  }
+

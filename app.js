@@ -165,7 +165,7 @@ app.use("/", userRouter); // ✅ user auth routes
 
 // Home page
 app.get("/", (req, res) => {
-  res.render("listings/index");
+  res.redirect("/listings");
 });
 
 // 404 handler

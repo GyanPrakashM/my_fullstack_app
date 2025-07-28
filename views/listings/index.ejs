@@ -102,10 +102,10 @@
   </div>
 
   <div class="carousel-inner">
-  <% for (let i = 0; i < 3 && i < allListings.length; i++) { 
+ <% for (let i = 0; i < 3 && i < allListings.length; i++) { %>
        let listing = allListings[i]; 
   %>
-    <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+  <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
       <a href="/listings/<%= listing._id %>">
         <img src="<%= listing.image.url %>" class="d-block w-100" alt="<%= listing.title %>">
       </a>

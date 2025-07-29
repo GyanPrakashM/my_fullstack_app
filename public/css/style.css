@@ -127,32 +127,28 @@ body {
 
 /* map */
 
-#map { 
-   height: 400px;
-   width: 90vh;
-
- }
-
- .carousel-item img {
-
-  height: 450px; /* ya jitna height tu chahe */
-  object-fit: cover;
+/* Map Section */
+#map {
+  height: 400px;
   width: 100%;
- overflow: hidden;
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
-  border-top-left-radius: 40px;
-  border-top-right-radius: 40px;
+  max-width: 100%;
+  border-radius: 20px;
+  margin: auto;
 }
 
-html {
-  scroll-behavior: smooth;
+/* Optional Responsive Tweaks (for small screens) */
+@media (max-width: 768px) {
+  #map {
+    height: 300px;
+  }
 }
 
-.carousel-item img:hover{
-    opacity: 0.4;
-    background-color:white;
+@media (max-width: 480px) {
+  #map {
+    height: 250px;
+  }
 }
+
 
 /* new.ejs */
 

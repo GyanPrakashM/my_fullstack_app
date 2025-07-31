@@ -1,5 +1,36 @@
 <% layout("layouts/boilerplate") %>  
 
+<style>
+  #mainCarousel {
+  height: 100vh;
+  overflow: hidden;
+  border-radius: 20px; /* Round edges */
+  margin: 0 auto;
+  width: 100%; /* Optional: make it slightly smaller than full width */
+}
+
+#mainCarousel .carousel-inner,
+#mainCarousel .carousel-item,
+#mainCarousel .carousel-item img {
+  height: 100%;
+}
+
+#mainCarousel .carousel-item img {
+  object-fit: cover;
+  width: 100%;
+  border-radius: 20px; /* Also round image edges */
+}
+
+@media (max-width: 768px) {
+  #mainCarousel {
+    height: 70vh;
+    border-radius: 0; /* Optional: no rounding on small screens */
+    width: 100%;
+  }
+}
+
+
+</style>
 
 <body>
 

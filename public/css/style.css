@@ -311,3 +311,15 @@ body {
     }
   }
 
+
+/* === Review Section Fix === */
+.review-card {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .review-card {
+    width: 48%; /* two cards per row on medium+ screens */
+  }
+}
